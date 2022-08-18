@@ -90,8 +90,6 @@ namespace Files.Uwp.Views
             }
             AllowDrop = true;
 
-            DragArea.Background = new TabbedBrush();
-
             ToggleFullScreenAcceleratorCommand = new RelayCommand<KeyboardAcceleratorInvokedEventArgs>(ToggleFullScreenAccelerator);
             ToggleCompactOverlayCommand = new RelayCommand(ToggleCompactOverlay);
             SetCompactOverlayCommand = new RelayCommand<bool>(SetCompactOverlay);
@@ -104,6 +102,8 @@ namespace Files.Uwp.Views
 
             UserSettingsService.OnSettingChangedEvent += UserSettingsService_OnSettingChangedEvent;
         }
+
+
 
         private async void PromptForReview()
         {
@@ -373,9 +373,17 @@ namespace Files.Uwp.Views
             }
         }
 
+        public AppWindow appWindow;
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Microsoft.UI.Xaml.Controls.BackdropMaterial.SetApplyToRootOrPageBackground(sender as Control, true);
+            var isTabbedSupported = ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush");
+            if (isTabbedSupported)
+            {
+                var tabbedBrush = new TabbedBrush(false);
+                (tabbedBrush as TabbedBrush).SetAppWindow();
+                DragArea.Background = tabbedBrush;
+            }
 
             // Defers the status bar loading until after the page has loaded to improve startup perf
             FindName(nameof(StatusBarControl));
