@@ -255,7 +255,7 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Height="40"
-                        HorizontalAlignment="Stretch"
+                        HorizontalAlignment="Right" Width="1000"
                         VerticalAlignment="Top"
                         Background="Transparent"
                         Loaded="DragArea_Loaded" />
